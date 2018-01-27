@@ -1,0 +1,30 @@
+{
+
+  "manifest_version": 2,
+  "name": "English Popup Dictionary",
+  "version": "1.3",
+
+  "description": "An English Dictionary which gives meaning of a word which is double-click selected on a webpage. This add-on makes use of www.wordnik.com API for the definitions. The search term is sent to the Wordnik API to retrive the definition.",
+  "icons": {
+    "96": "icons/Dico.png"
+  },
+
+  "permissions": [
+    "activeTab"
+  ],
+  "background": {
+    "scripts": ["jquery-3.2.1.min.js", "background.js"]
+  },
+
+  "browser_action": {
+    "default_icon": "icons/Dico.png",
+    "default_title": "English Popup Dictionary",
+    "default_popup": "popup/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["jquery-3.2.1.min.js", "content.js"] 
+    }
+  ]
+}
