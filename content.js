@@ -22,22 +22,30 @@ function handleError(error){
 }
 
 browser.runtime.onMessage.addListener(function(msg){
-    oRange = selectedText.getRangeAt(0);
-    oRect = oRange.getBoundingClientRect();
+    var oRange = selectedText.getRangeAt(0);
+    var oRect = oRange.getBoundingClientRect();
+    var tooltipDictBox;
     //console.log(oRect);
     //console.log(oRect.x+" "+oRect.y);
-    if(document.getElementById("tooltipDictBox"))
-        $("#tooltipDictBox").remove();
-    if(msg.response != '{"readyState":4,"responseText":"","status":404,"statusText":"Not Found"}'){
-        var div = document.createElement('p');  
-        div.id = "tooltipDictBox";
-        document.body.appendChild(div);
-        var tooltipDictBox = document.getElementById("tooltipDictBox");
-        div.innerHTML = div.innerText +"<br />"+msg.response;
+
+    tooltipDictBox = document.getElementById("tooltipDictBox");
+
+    if (msg.response == '{"readyState":4,"responseText":"","status":404,"statusText":"Not Found"}') {
+      if (tooltipDictBox) {
+        tooltipDictBox.remove();
+      }
+      return;
+    }
+
+    if(!tooltipDictBox) {
+        tooltipDictBox = document.createElement('p');
+        tooltipDictBox.id = "tooltipDictBox";
+        document.body.appendChild(tooltipDictBox);
         tooltipDictBox.style.boxShadow = "5px 5px 5px #888888";
         tooltipDictBox.style.position = 'absolute'; 
         tooltipDictBox.style.zIndex = "1000"; 
-        tooltipDictBox.style.top = oRect.top-div.style.height+window.scrollY + 'px'; 
+        tooltipDictBox.style.top =
+          oRect.top - tooltipDictBox.style.height+window.scrollY + 'px';
         tooltipDictBox.style.left = oRect.left+oRect.width+window.scrollX+1 + 'px';
         tooltipDictBox.style.backgroundColor = "#feffce";
         tooltipDictBox.style.padding = "10px";
@@ -46,6 +54,9 @@ browser.runtime.onMessage.addListener(function(msg){
         tooltipDictBox.style.borderRadius = "0px 5px 5px 5px";
         tooltipDictBox.style.maxWidth = "350px";
     }
+
+    tooltipDictBox.innerHTML = msg.response;
+
 });
 
 $(document).click(function(event){
