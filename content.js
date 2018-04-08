@@ -24,7 +24,11 @@ function handleError(error){
 browser.runtime.onMessage.addListener(function(msg){
     var oRange = selectedText.getRangeAt(0);
     var oRect = oRange.getBoundingClientRect();
+    var dictBoxPadding = 10;
+    var dictBoxMaxWidth = 350;
     var tooltipDictBox;
+    var dictBoxLeftOffset;
+    var pageWidth;
     //console.log(oRect);
     //console.log(oRect.x+" "+oRect.y);
 
@@ -46,15 +50,21 @@ browser.runtime.onMessage.addListener(function(msg){
         tooltipDictBox.style.zIndex = "1000"; 
         tooltipDictBox.style.top =
           oRect.top - tooltipDictBox.style.height+window.scrollY + 'px';
-        tooltipDictBox.style.left = oRect.left+oRect.width+window.scrollX+1 + 'px';
         tooltipDictBox.style.backgroundColor = "#feffce";
-        tooltipDictBox.style.padding = "10px";
+        tooltipDictBox.style.padding = dictBoxPadding + "px";
         tooltipDictBox.style.fontFamily = "Arial";
         tooltipDictBox.style.fontSize = "13px";
         tooltipDictBox.style.borderRadius = "0px 5px 5px 5px";
-        tooltipDictBox.style.maxWidth = "350px";
+        tooltipDictBox.style.maxWidth = dictBoxMaxWidth + "px";
     }
 
+    dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
+    pageWidth = $(window).width();
+    if ( (dictBoxMaxWidth + dictBoxLeftOffset ) > (pageWidth - dictBoxPadding)) {
+      dictBoxLeftOffset = pageWidth - dictBoxMaxWidth - dictBoxPadding;
+    }
+
+    tooltipDictBox.style.left = dictBoxLeftOffset + 'px';
     tooltipDictBox.innerHTML = msg.response;
 
 });
