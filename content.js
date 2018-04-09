@@ -29,55 +29,49 @@ browser.runtime.onMessage.addListener(function(msg){
     var tooltipDictBox;
     var dictBoxLeftOffset;
     var pageWidth;
-    //console.log(oRect);
-    //console.log(oRect.x+" "+oRect.y);
 
     tooltipDictBox = document.getElementById("tooltipDictBox");
-
+    
     if (msg.response == '{"readyState":4,"responseText":"","status":404,"statusText":"Not Found"}') {
-      if (tooltipDictBox) {
+        if (tooltipDictBox) {
         tooltipDictBox.remove();
-      }
-      return;
+        }
+        return;
     }
-
+    
     if(!tooltipDictBox) {
         tooltipDictBox = document.createElement('p');
         tooltipDictBox.id = "tooltipDictBox";
         document.body.appendChild(tooltipDictBox);
+
         tooltipDictBox.style.boxShadow = "5px 5px 5px #888888";
         tooltipDictBox.style.position = 'absolute'; 
         tooltipDictBox.style.zIndex = "1000"; 
-        tooltipDictBox.style.top =
-          oRect.top - tooltipDictBox.style.height+window.scrollY + 'px';
+        tooltipDictBox.style.top = oRect.top - tooltipDictBox.style.height+window.scrollY + 'px';
         tooltipDictBox.style.backgroundColor = "#feffce";
         tooltipDictBox.style.padding = dictBoxPadding + "px";
         tooltipDictBox.style.fontFamily = "Arial";
         tooltipDictBox.style.fontSize = "13px";
         tooltipDictBox.style.borderRadius = "0px 5px 5px 5px";
         tooltipDictBox.style.maxWidth = dictBoxMaxWidth + "px";
+    }
+    dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
+    pageWidth = $(window).width();
 
-        dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
-        pageWidth = $(window).width();
-        if ( (dictBoxMaxWidth + dictBoxLeftOffset ) > (pageWidth - dictBoxPadding)) {
-          dictBoxLeftOffset = pageWidth - dictBoxMaxWidth - dictBoxPadding;
-        }
-
-        tooltipDictBox.style.left = dictBoxLeftOffset + 'px';
+    if ( (dictBoxMaxWidth + dictBoxLeftOffset ) > (pageWidth - dictBoxPadding)) {
+      dictBoxLeftOffset = pageWidth - dictBoxMaxWidth - dictBoxPadding;
     }
 
-    tooltipDictBox.innerHTML = msg.response;
-
+    tooltipDictBox.style.left = dictBoxLeftOffset + 'px';
+    var content = DOMPurify.sanitize(msg.response);
+    $(tooltipDictBox).html(content);
 });
 
 $(document).click(function(event){
-    //console.log("Mouse down");
     if(!document.getElementById("tooltipDictBox").contains(event.target)){
         $("#tooltipDictBox").remove();
     }else{
-        //console.log("Clicked inside the definition tooltip");
         if(document.getElementById("closeBtnEPD").contains(event.target)){
-            //console.log("Clicked on close button");
             $("#tooltipDictBox").remove();
         }
     }

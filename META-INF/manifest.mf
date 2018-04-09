@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 
 Name: background.js
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: BYSQJ0JgNDnTaZTysmpMVw==
-SHA1-Digest: b0qV6xv+iZcnFdLFKyHq74Tbak0=
+MD5-Digest: M6y1qkk4DXmn3Fxvcj0Z2A==
+SHA1-Digest: F3pRMIVl9RtAWa7AixCr70YYuYM=
 
 Name: content.js
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: ln1l0XTXfCHsRJjlfPY2BQ==
-SHA1-Digest: CF2Ax5TGaFNZtytBtB0x6xgDgqw=
+MD5-Digest: FjxM8MdUT9y2otVEUiSuUw==
+SHA1-Digest: iog7xZrZv+UWa2ON4ajtKEgM2CI=
 
 Name: jquery-3.2.1.min.js
 Digest-Algorithms: MD5 SHA1
@@ -17,8 +17,8 @@ SHA1-Digest: EFUBjCirQQh++czv5BFgaJPavqI=
 
 Name: manifest.json
 Digest-Algorithms: MD5 SHA1
-MD5-Digest: nDCYUoOUZs3UmCkXw6OHqQ==
-SHA1-Digest: AcvGWxx2Ef97o/bnGUyQDvpP93c=
+MD5-Digest: U66Uo0+u5UCFuRL/7dod5g==
+SHA1-Digest: BOmic7VDP9dEXHqaUAiEfF6YqCM=
 
 Name: Bootstrap 3.3.7/css/bootstrap.min.css
 Digest-Algorithms: MD5 SHA1
@@ -34,6 +34,11 @@ Name: Bootstrap 3.3.7/js/bootstrap.min.js
 Digest-Algorithms: MD5 SHA1
 MD5-Digest: WGnJbMjxkIau5iXWcNdB+Q==
 SHA1-Digest: QwpEPXSDD+m+Ju/KQx9EjBs3QPk=
+
+Name: DOMPurify-master/dist/purify.min.js
+Digest-Algorithms: MD5 SHA1
+MD5-Digest: mG2btLM9xfUMV63dHoZLtQ==
+SHA1-Digest: J3D3osPpXdAdjUog17h2/VL/d68=
 
 Name: icons/Dico.png
 Digest-Algorithms: MD5 SHA1
