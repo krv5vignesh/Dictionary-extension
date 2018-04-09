@@ -56,15 +56,16 @@ browser.runtime.onMessage.addListener(function(msg){
         tooltipDictBox.style.fontSize = "13px";
         tooltipDictBox.style.borderRadius = "0px 5px 5px 5px";
         tooltipDictBox.style.maxWidth = dictBoxMaxWidth + "px";
+
+        dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
+        pageWidth = $(window).width();
+        if ( (dictBoxMaxWidth + dictBoxLeftOffset ) > (pageWidth - dictBoxPadding)) {
+          dictBoxLeftOffset = pageWidth - dictBoxMaxWidth - dictBoxPadding;
+        }
+
+        tooltipDictBox.style.left = dictBoxLeftOffset + 'px';
     }
 
-    dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
-    pageWidth = $(window).width();
-    if ( (dictBoxMaxWidth + dictBoxLeftOffset ) > (pageWidth - dictBoxPadding)) {
-      dictBoxLeftOffset = pageWidth - dictBoxMaxWidth - dictBoxPadding;
-    }
-
-    tooltipDictBox.style.left = dictBoxLeftOffset + 'px';
     tooltipDictBox.innerHTML = msg.response;
 
 });
