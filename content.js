@@ -64,7 +64,10 @@ browser.runtime.onMessage.addListener(function(msg){
         tooltipDictBox.style.left = dictBoxLeftOffset + 'px';
     }
 
-    var content = DOMPurify.sanitize(msg.response);
+    var content =  DOMPurify.sanitize(msg.response, {
+      SAFE_FOR_JQUERY: true,
+      ADD_ATTR: ["target"]
+    });
     $(tooltipDictBox).html(content);
 });
 
