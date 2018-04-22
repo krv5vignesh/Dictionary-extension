@@ -4,6 +4,7 @@ $(document).dblclick(function(){
 
 var selectedText;
 function dblclickSlection(){
+    var text;
     flag = 0;
     if (window.getSelection) {
         selectedText = window.getSelection();
@@ -12,7 +13,12 @@ function dblclickSlection(){
     } else if (document.selection) {
         selectedText = document.selection.createRange().text;
     }
-    browser.runtime.sendMessage({"term": selectedText.toString()}).then(handleResponse, handleError);
+    text = selectedText.toString();
+    if (/\s+/.test(text)) {
+      // skip search on multi words select
+      return;
+    }
+    browser.runtime.sendMessage({"term": text}).then(handleResponse, handleError);
 }
 function handleResponse(message){
     console.log("Response received ");

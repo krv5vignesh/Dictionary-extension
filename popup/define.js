@@ -23,6 +23,7 @@ $(document).dblclick(function(){
     setTimeout(() => {dblclickSlection();}, 300);
 });
 function dblclickSlection(){
+    var text;
     flag = 0;
     if (window.getSelection) {
         selectedText = window.getSelection();
@@ -32,7 +33,12 @@ function dblclickSlection(){
         selectedText = document.selection.createRange().text;
     }
     //console.log("Selected text is "+typeof(selectedText));
-    search(selectedText.toString());
+    text = selectedText.toString();
+    if (/\s+/.test(text)) {
+      // skip search on multi words select
+      return;
+    }
+    search(text);
 }
 function search(selectedText){
     var str = selectedText;
