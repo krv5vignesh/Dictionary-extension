@@ -33,7 +33,7 @@ function dblclickSlection(){
         selectedText = document.selection.createRange().text;
     }
     //console.log("Selected text is "+typeof(selectedText));
-    text = selectedText.toString();
+    text = selectedText.toString().trim();
     if (/\s+/.test(text)) {
       // skip search on multi words select
       return;
