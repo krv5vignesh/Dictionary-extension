@@ -59,7 +59,7 @@ function search(selectedText){
 				var definition = "";
 				definition += "<b>"+query+"</b>&nbsp;";
 				pronunciation_str = result[0]["raw"];
-				definition += pronunciation_str.substr(1, pronunciation_str.length-2)+"<br />";
+				definition += "("+pronunciation_str.substr(1, pronunciation_str.length-2)+")<br />";
 				if( data ){
 					var count = 0;
 					data.forEach((i, index)=> {
