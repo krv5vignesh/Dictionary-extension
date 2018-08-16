@@ -13,7 +13,7 @@ function dblclickSlection(){
     } else if (document.selection) {
         selectedText = document.selection.createRange().text;
     }
-    text = selectedText.toString();
+    text = selectedText.toString().trim();
     if (/\s+/.test(text)) {
       // skip search on multi words select
       return;
