@@ -22,10 +22,16 @@ function callAPI(callback, query){
     var definition="";
     var APIurl = "http://api.wordnik.com:80/v4/word.json/"+query+"/definitions?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
     $.getJSON(APIurl, function( data ) {
+        var PrAPIurl = "http://api.wordnik.com:80/v4/word.json/"+query+"/pronunciations?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
+        $.getJSON(PrAPIurl, function( result ) {
+        pronunciation_str = result[0]["raw"];
+        pronunciation_str = "("+pronunciation_str.substr(1, pronunciation_str.length-2)+")";
+        definition += "<b>" + query + "</b> "+ pronunciation_str + "<p id='closeBtnEPD' style='float:right;padding:2px 5px;'>X</p><br /><br />";
+
+        console.log(definition);
         if(typeof data != 'undefined' && data.length > 0){
             console.log(data);
             var count = 0;
-            definition += "<b>"+query+"</b><p id='closeBtnEPD' style='float:right;padding:2px 5px;'>X</p><br /><br />";
             data.forEach((i, index)=> {
                 //console.log(index);
                 if(index>=0 && count<3){
@@ -45,6 +51,8 @@ function callAPI(callback, query){
         callback(definition);
         }).fail(function(error, a, b) {
             console.log("Invalid selection");
-        }
-    );
+        });
+    }).fail(function(error, a, b) {
+        console.log("Invalid selection");
+    });
 }
