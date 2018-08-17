@@ -1,0 +1,8 @@
+{
+  "name": "dictionary-extension",
+  "description": "A Dictionary popup for Mozilla",
+  "dependencies": {
+    "eslint": "^5.3.0"
+  },
+  "devDependencies": {}
+}
