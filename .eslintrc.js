@@ -3,11 +3,13 @@ module.exports = {
         "browser": true,
         "es6": true
     },
-    "extends": "eslint:recommended",
+    "extends": ["plugin:prettier/recommended", "eslint:recommended"],
     "parserOptions": {
         "ecmaVersion": 2016
     },
+    "plugins": ["prettier"],
     "rules": {
+        "prettier/prettier": "error",
         "indent": [
             "error",
             4
