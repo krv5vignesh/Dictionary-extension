@@ -1,9 +1,9 @@
-# Firefox WebExtension - "English Popup Dictionary".
+# Firefox WebExtension - English Popup Dictionary
 
+##### GNU General Public License v3.0
 
 Pull requests are accepted.
 > git clone https://github.com/krv5vignesh/Dictionary-extension.git
-
 
 Download the WebExtension here:
 https://addons.mozilla.org/en-US/firefox/addon/english-popup-dictionary/
