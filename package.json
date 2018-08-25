@@ -5,7 +5,12 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": [ "eslint --fix", "git add" ]
+    "linters": {
+        "*.js": [ "eslint --fix", "git add" ]
+    },
+    "ignore": [
+        "./src/dependencies/**/*.*"
+    ]
   },
   "dependencies": {
     "eslint": "^5.3.0",
