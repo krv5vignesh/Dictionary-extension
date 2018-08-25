@@ -1,108 +1,134 @@
-/* global $ */
-var test = localStorage.getItem("test");
-//console.log(test);
-if (test) {
-    search(test);
-    localStorage.removeItem("test");
-}
-var selectedText = "";
-var flag = 1;
-document.getElementById("query").focus();
-document.getElementById("query").addEventListener("keyup", function(event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-        flag = 1;
-        document.getElementById("submitButton").click();
-    }
-});
-document.getElementById("submitButton").addEventListener("click", function() {
-    //console.log("Button clicked");
-    flag = 1;
-    search("");
-});
-$(document).dblclick(function() {
-    setTimeout(() => {
-        dblclickSlection();
-    }, 300);
-});
-function dblclickSlection() {
-    var text;
-    flag = 0;
-    if (window.getSelection) {
-        selectedText = window.getSelection();
-    } else if (document.getSelection) {
-        selectedText = document.getSelection();
-    } else if (document.selection) {
-        selectedText = document.selection.createRange().text;
-    }
-    //console.log("Selected text is "+typeof(selectedText));
-    text = selectedText.toString().trim();
-    if (/\s+/.test(text)) {
-        // skip search on multi words select
-        return;
-    }
-    search(text);
-}
-function search(selectedText) {
-    //console.log("Selected text inside is "+selectedText);
-    //
-    var query;
-    if (flag) {
-        //console.log("Normal search");
-        query = $("#query").val();
-    } else {
-        //console.log("Double click search");
-        query = selectedText;
-        $("#query").val(query);
-    }
-    //console.log("invoked "+query+" "+typeof(query));
-    query = query.replace(" ", "");
-    query = query.toLowerCase();
-    $("#result").html("Searching...");
-    //console.log("Loading API");
-    var APIurl =
-        "http://api.wordnik.com:80/v4/word.json/" +
-        query +
-        "/definitions?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
-    $.getJSON(APIurl, function(data) {
-        var PrAPIurl =
-            "http://api.wordnik.com:80/v4/word.json/" +
-            query +
-            "/pronunciations?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
-        $.getJSON(PrAPIurl, function(result) {
-            var definition = "";
-            definition += "<b>" + query + "</b>&nbsp;";
-            var pronunciation_str = result[0]["raw"];
-            definition +=
-                "(" +
-                pronunciation_str.substr(1, pronunciation_str.length - 2) +
-                ")<br />";
-            if (data) {
-                var count = 0;
-                data.forEach((i, index) => {
-                    //console.log(index);
-                    if (index >= 0 && count < 5) {
-                        definition += ++index + ". " + i.text + "<br />";
-                        count++;
-                    }
-                });
-            } else {
-                definition = "No definition found";
-            }
-            var googleQuery = "https://www.google.com/search?q=define+" + query;
-            definition +=
-                "<br /><a href='" +
-                googleQuery +
-                "'style='float:left' target='_blank'>More</a>";
-            $("#result").html(definition);
+(function() {
+    /* global $ */
 
-            // if(!flag){
-            //     $('#popover').attr("title", definition);
-            //     $('[data-toggle="tooltip"]').tooltip("show");
-            // }
-        }).fail(function() {
-            // console.log("Error retrieving data. Check your connection." + error + " " + a + " " + b );
-            $("#result").html("Error retrieving data. Check your connection.");
-        });
+    var recentSearch;
+
+    /* FIXME: this file has duplicate functions:
+    * e.g. formatResponse, getDefinition
+    * This should be improved.
+    */
+    function formatResponse(result) {
+        var resultHtml = "",
+            definitions;
+        var googleQuery, searchMore;
+
+        resultHtml += "<b>" + result.searchText + "</b>&nbsp";
+        if (result.pronounciation) {
+            resultHtml += result.pronounciation;
+        }
+        resultHtml +=
+            '<a id="closeBtnEPD" style="float:right;padding:2px 5px;color:grey">X</i></a><br/><br/>';
+
+        definitions = result.definitions.reduce(function(defHtml, def, id) {
+            return defHtml + (id + 1) + "." + def + "<br/>";
+        }, "");
+
+        googleQuery =
+            "https://www.google.com/search?q=define+" + result.searchText;
+        searchMore =
+            "<br/><a href='" +
+            googleQuery +
+            "'style='float:left; color:#1a0dab' target='_blank'>More</a>";
+        resultHtml += definitions + searchMore;
+
+        return resultHtml;
+    }
+
+    function updateDom(result) {
+        if (result.status !== "success") {
+            $("result").html("Error while fetching definitions");
+        }
+
+        $("#result").html(formatResponse(result));
+    }
+
+    function getDefinition(searchText, callback) {
+        var definitionApi =
+            "http://api.wordnik.com:80/v4/word.json/" +
+            searchText +
+            "/definitions?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
+        var pronounciationApi =
+            "http://api.wordnik.com:80/v4/word.json/" +
+            searchText +
+            "/pronunciations?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
+
+        var result = {
+            searchText: searchText,
+            definitions: [],
+            pronounciation: "",
+            status: "",
+        };
+
+        $.when($.getJSON(definitionApi), $.getJSON(pronounciationApi))
+            .then(function(result1, result2) {
+                result1 = result1[0];
+                result2 = result2[0];
+                result.status = "success";
+                result.definitions = result1.map(function(ele) {
+                    return ele.text;
+                });
+                if (Array.isArray(result2) && typeof result2[0] === "object") {
+                    result.pronounciation = result2.shift().raw;
+                }
+                // atleast one def should be present
+                if (result.definitions.length === 0) {
+                    result.status = "fail";
+                }
+            })
+            .fail(function() {
+                result.status = "fail";
+            })
+            .always(function() {
+                callback(result);
+            });
+    }
+
+    function requestDefinition(searchText) {
+        searchText = (searchText || "").toString().trim();
+
+        // skip search on multi words select
+        if (/\s+/.test(searchText)) {
+            return;
+        }
+
+        localStorage.setItem("recentSearchText", searchText);
+        getDefinition(searchText, updateDom);
+    }
+
+    // enter-key listener
+    document.getElementById("query").addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            requestDefinition($("#query").val());
+        }
     });
-}
+
+    // click listener
+    document
+        .getElementById("submitButton")
+        .addEventListener("click", function() {
+            requestDefinition($("#query").val());
+        });
+
+    // double click listener for recursive search
+    $(document).dblclick(function() {
+        var selectedText;
+
+        if (window.getSelection) {
+            selectedText = window.getSelection();
+        } else if (document.getSelection) {
+            selectedText = document.getSelection();
+        } else if (document.selection) {
+            selectedText = document.selection.createRange().text;
+        }
+
+        requestDefinition(selectedText);
+    });
+
+    // load recent search in init
+    recentSearch = localStorage.getItem("recentSearchText");
+    if (recentSearch) {
+        requestDefinition(recentSearch);
+    }
+    document.getElementById("query").focus();
+})();
