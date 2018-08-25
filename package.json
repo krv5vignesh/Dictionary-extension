@@ -6,10 +6,13 @@
   },
   "lint-staged": {
     "linters": {
-        "*.js": [ "eslint --fix", "git add" ]
+      "*.js": [
+        "eslint --fix",
+        "git add"
+      ]
     },
     "ignore": [
-        "./src/dependencies/**/*.*"
+      "./src/dependencies/**/*.*"
     ]
   },
   "dependencies": {
