@@ -1,0 +1,93 @@
+/* global $, browser, DOMPurify */
+$(document).dblclick(function() {
+    dblclickSlection();
+});
+
+var selectedText;
+function dblclickSlection() {
+    var text;
+    if (window.getSelection) {
+        selectedText = window.getSelection();
+    } else if (document.getSelection) {
+        selectedText = document.getSelection();
+    } else if (document.selection) {
+        selectedText = document.selection.createRange().text;
+    }
+    text = selectedText.toString().trim();
+    if (/\s+/.test(text)) {
+        // skip search on multi words select
+        return;
+    }
+    browser.runtime
+        .sendMessage({
+            term: text,
+        })
+        .then(handleResponse, handleError);
+}
+function handleResponse() {
+    // console.log("Response received ");
+}
+function handleError() {
+    // console.log("Error: " + error);
+}
+
+browser.runtime.onMessage.addListener(function(msg) {
+    var oRange = selectedText.getRangeAt(0);
+    var oRect = oRange.getBoundingClientRect();
+    var dictBoxPadding = 10;
+    var dictBoxMaxWidth = 350;
+    var tooltipDictBox;
+    var dictBoxLeftOffset;
+    var pageWidth;
+
+    tooltipDictBox = document.getElementById("tooltipDictBox");
+
+    if (JSON.parse(msg.response).status === 404) {
+        if (tooltipDictBox) {
+            tooltipDictBox.remove();
+        }
+        return;
+    }
+
+    if (!tooltipDictBox) {
+        tooltipDictBox = document.createElement("p");
+        tooltipDictBox.id = "tooltipDictBox";
+        document.body.appendChild(tooltipDictBox);
+
+        tooltipDictBox.style.boxShadow = "5px 5px 5px #888888";
+        tooltipDictBox.style.position = "absolute";
+        tooltipDictBox.style.zIndex = "1000";
+        tooltipDictBox.style.top =
+            oRect.top - tooltipDictBox.style.height + window.scrollY + "px";
+        tooltipDictBox.style.backgroundColor = "#feffce";
+        tooltipDictBox.style.padding = dictBoxPadding + "px";
+        tooltipDictBox.style.fontFamily = "Arial";
+        tooltipDictBox.style.fontSize = "13px";
+        tooltipDictBox.style.borderRadius = "0px 5px 5px 5px";
+        tooltipDictBox.style.maxWidth = dictBoxMaxWidth + "px";
+
+        dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
+        pageWidth = $(window).width();
+        if (dictBoxMaxWidth + dictBoxLeftOffset > pageWidth - dictBoxPadding) {
+            dictBoxLeftOffset = pageWidth - dictBoxMaxWidth - dictBoxPadding;
+        }
+
+        tooltipDictBox.style.left = dictBoxLeftOffset + "px";
+    }
+
+    var content = DOMPurify.sanitize(msg.response, {
+        SAFE_FOR_JQUERY: true,
+        ADD_ATTR: ["target"],
+    });
+    $(tooltipDictBox).html(content);
+});
+
+$(document).click(function(event) {
+    if (!document.getElementById("tooltipDictBox").contains(event.target)) {
+        $("#tooltipDictBox").remove();
+    } else {
+        if (document.getElementById("closeBtnEPD").contains(event.target)) {
+            $("#tooltipDictBox").remove();
+        }
+    }
+});
