@@ -10,7 +10,8 @@
   },
 
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "background": {
     "scripts": ["./dependencies/jquery-3.2.1.min.js", "background.js"]
@@ -30,5 +31,15 @@
           "./dependencies/DOMPurify-master/dist/purify.min.js"
         ]
     }
-  ]
+  ],
+
+  "applications": {
+    "gecko": {
+        "id": "{f9a1ed11-9f98-4fdf-a4d8-b0c32fdc2e7d}"
+    }
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "browser_style": true
+  }
 }

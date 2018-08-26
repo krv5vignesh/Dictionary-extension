@@ -1,0 +1,34 @@
+.dictionary-settings-holder {
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #dc143c80;
+}
+
+.dictionary-select-title {
+    font: 14px/28px arial;
+    display: block;
+    background-color: rgb(231, 233, 236);
+    padding-left: 8px;
+}
+
+.dictionary-select-options {
+    padding-left: 16px;
+    font: 13px/26px arial;
+}
+
+.dictionary-radio-select {
+    margin-top: 4px;
+}
+
+.dictionary-radio-select label:hover {
+    cursor: pointer;
+}
+
+.save-btn {
+    margin-top: 16px;
+    padding: 4px 8px;
+}
+
+.hidden {
+    display: none;
+}

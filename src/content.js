@@ -93,6 +93,17 @@
         minHeight: "60px",
     };
 
+    var tooltipDictBoxThemes = {
+        dark: {
+            backgroundColor: "#343a40",
+            color: "white",
+        },
+        light: {
+            backgroundColor: "#feffce",
+            color: "black",
+        },
+    };
+
     var tooltipTitleHolderCss = {
         paddingBottom: "12px",
     };
@@ -109,7 +120,8 @@
         cursor: "pointer",
         float: "right",
         borderRadius: "12px",
-        height: "24px",
+        minHeight: "24px",
+        minWidht: "24px",
         fontSize: "14px",
         border: "none",
     };
@@ -119,6 +131,15 @@
         color: "#1a0dab",
     };
 
+    var searchMoreLinkThemes = {
+        dark: {
+            color: "lightblue",
+        },
+        light: {
+            color: "#1a0dab",
+        },
+    };
+
     function purify(html) {
         return DOMPurify.sanitize(html, {
             SAFE_FOR_JQUERY: true,
@@ -126,11 +147,26 @@
         });
     }
 
-    browser.runtime.onMessage.addListener(function(msg) {
-        if (msg.searchText !== recentSelection.text) {
+    function getTheme(theme) {
+        var hours;
+
+        if (theme.value !== "auto") {
+            return theme.value;
+        }
+
+        hours = new Date().getHours();
+        if (hours < 6 || hours > 20) {
+            return "dark";
+        }
+        return "light";
+    }
+
+    browser.runtime.onMessage.addListener(function(response) {
+        if (response.search.searchText !== recentSelection.text) {
             return;
         }
 
+        var searchData;
         var textRegion = recentSelection.region;
         var oRect = textRegion.getRangeAt(0).getBoundingClientRect();
 
@@ -152,13 +188,20 @@
             $("#closeBtnEPD").css(closeBtnEPDCss);
         }
 
+        // update theme
+        if (response.db && response.db.theme) {
+            var theme = getTheme(response.db.theme);
+            $("#tooltipDictBox").css(tooltipDictBoxThemes[theme]);
+            $("#searchMoreLink").css(searchMoreLinkThemes[theme]);
+        }
+
         // update html
         $("#tooltipDictBox").show();
-        msg = formatResponse(msg);
-        $("#searchTextTitle").html(msg.searchText);
-        $("#searchPronounciation").html(msg.pronounciation || "");
-        $("#searchDefinitions").html(msg.definitions);
-        $("#searchMoreLink").prop("href", msg.googleQuery);
+        searchData = formatResponse(response.search);
+        $("#searchTextTitle").html(searchData.searchText);
+        $("#searchPronounciation").html(searchData.pronounciation || "");
+        $("#searchDefinitions").html(searchData.definitions);
+        $("#searchMoreLink").prop("href", searchData.googleQuery);
 
         // do not alter position for recursive click in popups
         if (!reusePopup) {
