@@ -10,10 +10,6 @@ module.exports = {
     "plugins": ["prettier"],
     "rules": {
         "prettier/prettier": "error",
-        "indent": [
-            "error",
-            4
-        ],
         "linebreak-style": [
             "error",
             "windows"
@@ -26,6 +22,7 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-console": ["error", {"allow": ["warn", "error"]}]
     }
 };
