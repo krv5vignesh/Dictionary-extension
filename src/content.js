@@ -1,41 +1,37 @@
 (function() {
-    /* global $, browser, DOMPurify */
+    /* global $, browser, DOMPurify*/
 
     // show definition for only the latest selection
     var recentSelection = {
         text: "",
         region: {},
     };
+    var reusePopup = false;
 
     function formatResponse(result) {
-        var resultHtml = "",
-            definitions;
-        var googleQuery, searchMore;
+        var queryPrefix = "https://www.google.com/search?q=define+";
 
-        resultHtml += "<b>" + result.searchText + "</b>&nbsp";
-        if (result.pronounciation) {
-            resultHtml += result.pronounciation;
+        result.googleQuery = queryPrefix + result.searchText;
+
+        if (result.status === "fail") {
+            result.definitions = "No definition found";
+            result.pronounciation = "";
+            return result;
         }
-        resultHtml +=
-            '<a id="closeBtnEPD" style="float:right;padding:2px 5px;color:grey">X</i></a><br/><br/>';
 
-        definitions = result.definitions.reduce(function(defHtml, def, id) {
-            return defHtml + (id + 1) + "." + def + "<br/>";
-        }, "");
+        result.definitions = result.definitions
+            .map(function(def, i) {
+                var id = i + 1;
+                return id + ". " + def;
+            })
+            .join("<br/>");
 
-        googleQuery =
-            "https://www.google.com/search?q=define+" + result.searchText;
-        searchMore =
-            "<br/><a href='" +
-            googleQuery +
-            "'style='float:left; color:#1a0dab' target='_blank'>More</a>";
-        resultHtml += definitions + searchMore;
-
-        return resultHtml;
+        return result;
     }
 
-    $(document).dblclick(function() {
+    $(document).dblclick(function(event) {
         var selectedObj;
+        var tooltipDictBox;
 
         if (window.getSelection) {
             selectedObj = window.getSelection();
@@ -43,6 +39,13 @@
             selectedObj = document.getSelection();
         } else if (document.selection) {
             selectedObj = document.selection.createRange().text;
+        }
+
+        tooltipDictBox = document.getElementById("tooltipDictBox");
+        if (tooltipDictBox && tooltipDictBox.contains(event.target)) {
+            reusePopup = true;
+        } else {
+            reusePopup = false;
         }
 
         requestDefinition(selectedObj);
@@ -60,62 +63,121 @@
         browser.runtime.sendMessage({ searchText: searchText });
     }
 
+    var tooltipDictBoxHtml =
+        '<div id="tooltipDictBox">\
+            <div id="tooltipTitleHolder">\
+                <p id="searchTextTitle"></p>\
+                <span id="searchPronounciation"></span>\
+                <button id="closeBtnEPD">x</button><br/>\
+            </div>\
+            <p id="searchDefinitions"></p>\
+            <div id="tooltipDictBoxFooter">\
+                <a href="" id="searchMoreLink" target="_blank">More</a>\
+            </div>\
+        </div>';
+
+    var dictBoxPadding = 10;
+    var maxWidth = 350;
+
+    var tooltipDictBoxCss = {
+        boxShadow: "5px 5px 5px #888888",
+        position: "absolute",
+        zIndex: "999999",
+        backgroundColor: "#feffce",
+        padding: dictBoxPadding + "px",
+        fontFamily: "Arial",
+        fontSize: "14px",
+        borderRadius: "0px 5px 5px 5px",
+        maxWidth: maxWidth + "px",
+        minWidth: "200px",
+        minHeight: "60px",
+    };
+
+    var tooltipTitleHolderCss = {
+        paddingBottom: "12px",
+    };
+
+    var searchTextTitleCss = {
+        fontFamily: "Open Sans",
+        fontWeight: 600,
+        display: "inline",
+        fontSize: "13px",
+    };
+
+    var closeBtnEPDCss = {
+        color: "grey",
+        cursor: "pointer",
+        float: "right",
+        borderRadius: "12px",
+        height: "24px",
+        fontSize: "14px",
+        border: "none",
+    };
+
+    var searchMoreLinkCss = {
+        float: "left",
+        color: "#1a0dab",
+    };
+
+    function purify(html) {
+        return DOMPurify.sanitize(html, {
+            SAFE_FOR_JQUERY: true,
+            ADD_ATTR: ["target"],
+        });
+    }
+
     browser.runtime.onMessage.addListener(function(msg) {
-        if (
-            msg.searchText !== recentSelection.text ||
-            msg.status !== "success"
-        ) {
+        if (msg.searchText !== recentSelection.text) {
             return;
         }
 
         var textRegion = recentSelection.region;
         var oRect = textRegion.getRangeAt(0).getBoundingClientRect();
-        var dictBoxPadding = 10;
-        var dictMinHeight = 200;
-        var dictBoxMaxWidth = 350;
-        var tooltipDictBox;
-        var dictBoxLeftOffset;
-        var pageWidth;
 
-        tooltipDictBox = document.getElementById("tooltipDictBox");
+        var tooltipDictBox, tooltipDictBoxHeight;
+        var leftOffset, topOffset;
+        var pageWidth, pageHeight;
 
-        if (!tooltipDictBox) {
-            tooltipDictBox = document.createElement("p");
-            tooltipDictBox.id = "tooltipDictBox";
-            document.body.appendChild(tooltipDictBox);
+        tooltipDictBox = $("#tooltipDictBox");
 
-            tooltipDictBox.style.boxShadow = "5px 5px 5px #888888";
-            tooltipDictBox.style.position = "absolute";
-            tooltipDictBox.style.zIndex = "999999";
-            tooltipDictBox.style.top =
-                oRect.top - tooltipDictBox.style.height + window.scrollY + "px";
-            tooltipDictBox.style.backgroundColor = "#feffce";
-            tooltipDictBox.style.padding = dictBoxPadding + "px";
-            tooltipDictBox.style.fontFamily = "Arial";
-            tooltipDictBox.style.fontSize = "13px";
-            tooltipDictBox.style.borderRadius = "0px 5px 5px 5px";
-            tooltipDictBox.style.maxWidth = dictBoxMaxWidth + "px";
-            tooltipDictBox.style.minHeight = dictMinHeight + "px";
-
-            dictBoxLeftOffset = oRect.left + oRect.width + window.scrollX + 1;
-            pageWidth = $(window).width();
-            if (
-                dictBoxMaxWidth + dictBoxLeftOffset >
-                pageWidth - dictBoxPadding
-            ) {
-                dictBoxLeftOffset =
-                    pageWidth - dictBoxMaxWidth - dictBoxPadding;
-            }
-
-            tooltipDictBox.style.left = dictBoxLeftOffset + "px";
+        if (!tooltipDictBox.length) {
+            // create
+            tooltipDictBox = $(purify(tooltipDictBoxHtml));
+            $("body").append(tooltipDictBox);
+            // insert css
+            $("#tooltipDictBox").css(tooltipDictBoxCss);
+            $("#tooltipTitleHolder").css(tooltipTitleHolderCss);
+            $("#searchTextTitle").css(searchTextTitleCss);
+            $("#searchMoreLink").css(searchMoreLinkCss);
+            $("#closeBtnEPD").css(closeBtnEPDCss);
         }
 
-        var content = DOMPurify.sanitize(formatResponse(msg), {
-            SAFE_FOR_JQUERY: true,
-            ADD_ATTR: ["target"],
-        });
+        // update html
+        $("#tooltipDictBox").show();
+        msg = formatResponse(msg);
+        $("#searchTextTitle").html(msg.searchText);
+        $("#searchPronounciation").html(msg.pronounciation || "");
+        $("#searchDefinitions").html(msg.definitions);
+        $("#searchMoreLink").prop("href", msg.googleQuery);
 
-        $(tooltipDictBox).html(content);
+        // do not alter position for recursive click in popups
+        if (!reusePopup) {
+            pageWidth = $(window).width();
+            pageHeight = $(window).height();
+            tooltipDictBoxHeight = tooltipDictBox.height();
+            // adjust top/left position
+            leftOffset = oRect.left + oRect.width + 1 + dictBoxPadding;
+            if (maxWidth + leftOffset > pageWidth - dictBoxPadding) {
+                leftOffset = pageWidth - maxWidth - dictBoxPadding;
+            }
+            topOffset = oRect.top;
+            if (topOffset + tooltipDictBoxHeight > pageHeight) {
+                topOffset -= tooltipDictBoxHeight;
+            }
+            leftOffset += window.scrollX;
+            topOffset += window.scrollY;
+            $("#tooltipDictBox").css({ top: topOffset, left: leftOffset });
+        }
     });
 
     $(document).click(function(event) {
@@ -125,9 +187,9 @@
         if (!tooltipDictBox) {
             // tooltip not available, just ignore
         } else if (!tooltipDictBox.contains(event.target)) {
-            $("#tooltipDictBox").remove();
+            $("#tooltipDictBox").hide();
         } else if (closeBtn.contains(event.target)) {
-            $("#tooltipDictBox").remove();
+            $("#tooltipDictBox").hide();
         }
     });
 })();
