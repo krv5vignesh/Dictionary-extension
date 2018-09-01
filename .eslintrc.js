@@ -10,21 +10,19 @@ module.exports = {
     "plugins": ["prettier"],
     "rules": {
         "prettier/prettier": "error",
-        "indent": [
-            "error",
-            4
-        ],
         "linebreak-style": [
             "error",
             "windows"
         ],
         "quotes": [
             "error",
-            "double"
+            "double",
+            { "avoidEscape": true }
         ],
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-console": ["error", {"allow": ["warn", "error"]}]
     }
 };

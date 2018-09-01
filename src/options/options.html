@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Dictionary Popup Options</title>
+        <link rel="stylesheet" href="./options.css">
+    </head>
+    <body>
+        <div id="dictionary-settings" class="dictionary-settings-holder">
+            <div class="dictionary-select-holder" id="dictionary-theme">
+                <p class="dictionary-select-title"> Select Theme </p>
+                <div class="dictionary-select-options">
+                    <div class="dictionary-radio-select">
+                        <input type="radio" name="dictionaryTheme"
+                        value="light" id="dictionary-theme-light">
+                        <label for="dictionary-theme-light"> Light </label>
+                    </div>
+                    <div class="dictionary-radio-select">
+                        <input type="radio" name="dictionaryTheme"
+                        value="dark" id="dictionary-theme-dark">
+                        <label for="dictionary-theme-dark"> Dark </label>
+                    </div>
+                    <div class="dictionary-radio-select">
+                        <input type="radio" name="dictionaryTheme"
+                        value="auto" id="dictionary-theme-auto">
+                        <label for="dictionary-theme-auto"> Auto Switch </label>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="save-btn"
+                id="dictionary-settings-save-btn">Save</button>
+        </div>
+        <script src="../dependencies/jquery-3.2.1.min.js"></script>
+        <script src="./options.js"></script>
+    </body>
+</html>
