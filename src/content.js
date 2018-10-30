@@ -85,15 +85,14 @@
         zIndex: "999999",
         backgroundColor: "#feffce",
         padding: dictBoxPadding + "px",
-        fontFamily: "Arial",
-        fontSize: "14px",
+        font: "normal 14px/28px Arial",
         borderRadius: "0px 5px 5px 5px",
         maxWidth: maxWidth + "px",
         minWidth: "200px",
         minHeight: "60px",
     };
 
-    var tooltipDictBoxThemes = {
+    var textThemes = {
         dark: {
             backgroundColor: "#343a40",
             color: "white",
@@ -109,10 +108,12 @@
     };
 
     var searchTextTitleCss = {
-        fontFamily: "Open Sans",
-        fontWeight: 600,
+        font: "bold 14px/28px Arial",
         display: "inline",
-        fontSize: "13px",
+    };
+
+    var searchDefinitionsCss = {
+        font: "normal 14px/26px Arial",
     };
 
     var closeBtnEPDCss = {
@@ -120,15 +121,20 @@
         cursor: "pointer",
         float: "right",
         borderRadius: "12px",
-        minHeight: "24px",
-        minWidht: "24px",
-        fontSize: "14px",
+        height: "30px",
+        width: "30px",
+        font: "normal 13px/17px Arial",
         border: "none",
+        margin: 0,
+        padding: "6px 12px",
+        backgroundColor: "whitesmoke",
+        textTransform: "lowercase",
     };
 
     var searchMoreLinkCss = {
         float: "left",
         color: "#1a0dab",
+        font: "normal 14px/28px Arial",
     };
 
     var searchMoreLinkThemes = {
@@ -185,13 +191,17 @@
             $("#tooltipTitleHolder").css(tooltipTitleHolderCss);
             $("#searchTextTitle").css(searchTextTitleCss);
             $("#searchMoreLink").css(searchMoreLinkCss);
+            $("#searchDefinitions").css(searchDefinitionsCss);
             $("#closeBtnEPD").css(closeBtnEPDCss);
         }
 
         // update theme
         if (response.db && response.db.theme) {
             var theme = getTheme(response.db.theme);
-            $("#tooltipDictBox").css(tooltipDictBoxThemes[theme]);
+            $("#tooltipDictBox").css(textThemes[theme]);
+            $("#searchDefinitions").css(textThemes[theme]);
+            $("#searchTextTitle").css(textThemes[theme]);
+            $("#searchPronounciation").css(textThemes[theme]);
             $("#searchMoreLink").css(searchMoreLinkThemes[theme]);
         }
 
