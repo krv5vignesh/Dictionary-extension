@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Dictionary Popup Options</title>
+        <link rel="stylesheet" href="./options.css">
+    </head>
+    <body>
+        <div id="dictionary-settings" class="dictionary-settings-holder">
+            <div class="dictionary-select-holder" id="search-engine-section">
+                <p class="dictionary-select-title">Search engine for more information</p>
+                <div class="dictionary-select-options">
+                    <select id="search-engine" style="height:30px">
+                        <option value="https://duckduckgo.com/?q=define+">Duck Duck Go</option>
+                        <option value="https://www.startpage.com/do/dsearch?query=define+">StartPage</option>
+                        <option value="https://searx.me/?q=define+">Searx</option>
+                        <option value="https://www.qwant.com/?q=define+">Qwant</option>
+                        <option value="https://www.bing.com/search?q=define+">Bing</option>
+                        <option value="https://search.yahoo.com/search?p=define+">Yahoo</option>
+                        <option value="https://www.google.com/search?q=define+" selected>Google</option>
+                        <option value="https://en.wikipedia.org/wiki/">Wikipedia</option>
+                        <option value="https://www.dictionary.com/browse/">Dictionary.com</option>
+                        <option value="https://www.merriam-webster.com/dictionary/">Merriam-Webster</option>
+                        <option value="https://en.oxforddictionaries.com/definition/">Oxford Dictionaries</option>
+                        <option value="https://www.thefreedictionary.com/">Free Dictionary</option>
+                        <option value="https://www.urbandictionary.com/define.php?term=">Urban Dictionary</option>
+                    </select>
+                </div>
+            </div>
+            <div class="dictionary-select-holder" id="dictionary-theme">
+                <p class="dictionary-select-title"> Select Theme </p>
+                <div class="dictionary-select-options">
+                    <div class="dictionary-radio-select">
+                        <input type="radio" name="dictionaryTheme"
+                        value="light" id="dictionary-theme-light">
+                        <label for="dictionary-theme-light"> Light </label>
+                    </div>
+                    <div class="dictionary-radio-select">
+                        <input type="radio" name="dictionaryTheme"
+                        value="dark" id="dictionary-theme-dark">
+                        <label for="dictionary-theme-dark"> Dark </label>
+                    </div>
+                    <div class="dictionary-radio-select">
+                        <input type="radio" name="dictionaryTheme"
+                        value="auto" id="dictionary-theme-auto">
+                        <label for="dictionary-theme-auto"> Auto Switch </label>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="save-btn" id="dictionary-settings-save-btn">Save</button>
+            <p id="success-message" style="color:green;">Saved successfully</p>
+        </div>
+        <script src="../dependencies/jquery-3.2.1.min.js"></script>
+        <script src="./options.js"></script>
+    </body>
+</html>
