@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "English Popup Dictionary",
-  "version": "1.8",
+  "version": "1.8.1",
 
   "description": "An English Dictionary which gives meaning of a word which is double-click selected on a webpage.",
   "icons": {

@@ -52,6 +52,54 @@
         // save regions for later use
         recentSelection.region = selectedObj;
         recentSelection.text = searchText;
+
+        //Draw popup and then send request
+        if (true) {
+            var textRegion = recentSelection.region;
+            var oRect = textRegion.getRangeAt(0).getBoundingClientRect();
+
+            var tooltipDictBox, tooltipDictBoxHeight;
+            var leftOffset, topOffset;
+            var pageWidth, pageHeight;
+
+            // create
+            tooltipDictBox = $(purify(tooltipDictBoxHtml));
+            $("body").append(tooltipDictBox);
+            // insert css
+            $("#tooltipDictBox").css(tooltipDictBoxCss);
+            $("#tooltipTitleHolder").css(tooltipTitleHolderCss);
+            $("#searchTextTitle").css(searchTextTitleCss);
+            $("#searchMoreLink").css(searchMoreLinkCss);
+            $("#searchDefinitions").css(searchDefinitionsCss);
+            $("#closeBtnEPD").css(closeBtnEPDCss);
+            
+            $("#searchPronounciation").css("display", "none");
+            $("#tooltipTitleHolder").css("display", "none");
+            $("#searchMoreLink").css("display", "none");
+            $("#searchTextTitle").css("display", "none");
+            $("#searchDefinitions").html("Searching...");
+            $("#tooltipDictBox").show();
+
+            // do not alter position for recursive click in popups
+            if (!reusePopup) {
+                pageWidth = $(window).width();
+                pageHeight = $(window).height();
+                tooltipDictBoxHeight = tooltipDictBox.height();
+                // adjust top/left position
+                leftOffset = oRect.left + oRect.width + 1 + dictBoxPadding;
+                if (maxWidth + leftOffset > pageWidth - dictBoxPadding) {
+                    leftOffset = pageWidth - maxWidth - dictBoxPadding;
+                }
+                topOffset = oRect.top;
+                if (topOffset + tooltipDictBoxHeight > pageHeight) {
+                    topOffset -= tooltipDictBoxHeight;
+                }
+                leftOffset += window.scrollX;
+                topOffset += window.scrollY;
+                $("#tooltipDictBox").css({ top: topOffset, left: leftOffset });
+            }
+        }
+
         browser.runtime.sendMessage({ searchText: searchText });
     }
 
@@ -161,6 +209,7 @@
 
     browser.runtime.onMessage.addListener(function(response) {
         if (response.search.searchText !== recentSelection.text) {
+            $("#tooltipDictBox").hide();
             return;
         }
 
@@ -174,18 +223,6 @@
 
         tooltipDictBox = $("#tooltipDictBox");
 
-        if (!tooltipDictBox.length) {
-            // create
-            tooltipDictBox = $(purify(tooltipDictBoxHtml));
-            $("body").append(tooltipDictBox);
-            // insert css
-            $("#tooltipDictBox").css(tooltipDictBoxCss);
-            $("#tooltipTitleHolder").css(tooltipTitleHolderCss);
-            $("#searchTextTitle").css(searchTextTitleCss);
-            $("#searchMoreLink").css(searchMoreLinkCss);
-            $("#searchDefinitions").css(searchDefinitionsCss);
-            $("#closeBtnEPD").css(closeBtnEPDCss);
-        }
         // update theme
         if (response.db && response.db.theme) {
             var theme = getTheme(response.db.theme);
@@ -201,6 +238,10 @@
         }
 
         // update html
+        $("#tooltipTitleHolder").css("display", "");
+        $("#searchPronounciation").css("display", "");
+        $("#searchMoreLink").css("display", "");
+        $("#searchTextTitle").css("display", "inline");
         $("#tooltipDictBox").show();
         searchData = formatResponse(response.search);
         $("#searchTextTitle").html(searchData.searchText);
