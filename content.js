@@ -17,14 +17,7 @@
             result.pronounciation = "";
             return result;
         }
-
-        result.definitions = result.definitions
-            .map(function(def, i) {
-                var id = i + 1;
-                return id + ". " + def;
-            })
-            .join("<br/>");
-
+        
         return result;
     }
 

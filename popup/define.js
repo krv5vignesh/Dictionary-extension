@@ -19,9 +19,7 @@
         resultHtml +=
             '<a id="closeBtnEPD" style="float:right;padding:2px 5px;color:grey">X</i></a><br/><br/>';
 
-        definitions = result.definitions.reduce(function(defHtml, def, id) {
-            return defHtml + (id + 1) + "." + def + "<br/>";
-        }, "");
+        definitions = result.definitions + "<br />";
 
         googleQuery = queryPrefix + result.searchText;
         searchMore =
@@ -42,36 +40,34 @@
     }
 
     function getDefinition(searchText, callback) {
-        var definitionApi =
-            "http://api.wordnik.com:80/v4/word.json/" +
-            searchText +
-            "/definitions?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
-        var pronounciationApi =
-            "http://api.wordnik.com:80/v4/word.json/" +
-            searchText +
-            "/pronunciations?limit=5&includeRelated=true&useCanonical=true&includeTags=false&api_key=bcd982311d2626ed980040462970e1996105e37a799092b7c";
+        var definitionApi = "https://googledictionaryapi.eu-gb.mybluemix.net/?define=" + searchText;
 
         var result = {
             searchText: searchText,
-            definitions: [],
+            definitions: "",
             pronounciation: "",
             status: "",
         };
 
-        $.when($.getJSON(definitionApi), $.getJSON(pronounciationApi))
-            .then(function(result1, result2) {
-                result1 = result1[0];
-                result2 = result2[0];
-                result.status = "success";
-                result.definitions = result1.map(function(ele) {
-                    return ele.text;
-                });
-                if (Array.isArray(result2) && typeof result2[0] === "object") {
-                    result.pronounciation = result2.shift().raw;
-                }
-                // atleast one def should be present
-                if (result.definitions.length === 0) {
-                    result.status = "fail";
+        $.when($.getJSON(definitionApi))
+            .then(function(data) {
+                result.pronounciation = data[0].phonetic;
+                var definition = "";
+                if(data[0] && data[0].meaning){
+                    var meanings = data[0].meaning;
+                    var index = 1;
+                    for(var meaning in meanings){
+                        if(meanings.hasOwnProperty(meaning)){
+                            definition += index+ ". (" + meaning + ") "+meanings[meaning][0].definition;
+                            if(index != Object.keys(meanings).length){
+                                definition += "<br />";
+                            }
+                        }
+                        index++;
+                    }
+                    result.status = "success";
+                    result.definitions = definition;
+
                 }
             })
             .fail(function() {

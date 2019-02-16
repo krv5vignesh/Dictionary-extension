@@ -1,0 +1,110 @@
+Manifest-Version: 1.0
+
+Name: background.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: 2OyUQC+w8I7HOj4Kad6OwQ==
+SHA1-Digest: eb9G6wpg4c99FOM1WHOX4k5HyP8=
+SHA256-Digest: M7tHDaMRO19hqTwoKVEoJdM4XkkD8LxNxU3lK/QckcI=
+
+Name: content.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: CnGnWvXnL54pN9yp/r+KgA==
+SHA1-Digest: noMLFN01HtpJi3IekfTtj1TPLSU=
+SHA256-Digest: H2kOam3PvU7/CwK+L42mDymQR0LJFinKyib2q4wOo20=
+
+Name: manifest.json
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: GshqzqntQHHaRcqCDI0jeg==
+SHA1-Digest: jVf5A8LOSMaMB4CkMhR8Vy26FJg=
+SHA256-Digest: h1Qbl326PpHcvSxcSXPmX7PIBtlLnlTeVNnweOjvfYs=
+
+Name: dependencies/jquery-3.2.1.min.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: RzlXz7JVp4G0LLKvUdVKOw==
+SHA1-Digest: Z72svQd+5Z9BEQn9EZ7p9Y2xWl8=
+SHA256-Digest: dbcH2HYeK/vSX71mHykKT3/RHEjhv1Ojbca9igA0+jU=
+
+Name: dependencies/Bootstrap 3.3.7/css/bootstrap.min.css
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: UFfzIfDchc2NqUoMX2eo9A==
+SHA1-Digest: IkyfmtEbSVNYqmHb1T6DjpthAVs=
+SHA256-Digest: Wj2MBXhUhdNu5clNRoHlsdnkuUxb6LW9ew8xaP/xvZo=
+
+Name: dependencies/Bootstrap 3.3.7/css/bootstrap.min.css.map
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: Nbeevgt4BcHIRSStkg+qMw==
+SHA1-Digest: 4NeyveVaC6wbZYpQfoykkaZyngY=
+SHA256-Digest: tKNdGXk95EX0Yi9NKNsnnAJCtgIo7zBDQKrYM9ASp30=
+
+Name: dependencies/Bootstrap 3.3.7/js/bootstrap.min.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: BMhIUumTexQqxzwoW4lbhQ==
+SHA1-Digest: j7ipMZBVJT0IXt/Du3LSD2FOxwk=
+SHA256-Digest: NkYOSU5MYoRDr97UCydDte3ppKdvtPe57yNFzH5Z/WQ=
+
+Name: dependencies/DOMPurify-master/dist/purify.min.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: aNvdC6vfKPL3UANQ65SmCA==
+SHA1-Digest: uxGknGwmbz00mJ8TyFO+1JRguHM=
+SHA256-Digest: tVP5Z+UR7arGXjiDkk36f/c5lBoZcuUhV7btw7uwVgw=
+
+Name: icons/Dico.png
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: k2mhYA8q1vcjitvcD4BLyw==
+SHA1-Digest: mdb+13kI9dW0ToZrSMgI45h15ac=
+SHA256-Digest: 8qIVegg5WmvywZEZU4cNT9xPY27GzEyctxwMGF4hOEA=
+
+Name: icons/dict-32.png
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: 2PejkJgK7gTSYI0XNbsoTQ==
+SHA1-Digest: 9nhmG0RrTavvQtK9mgnPtYbOTVc=
+SHA256-Digest: xmuAbaLoJo0SkoTNYkTCRy2teT5R9gECjjIb7uu09TY=
+
+Name: icons/dict-48.png
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: /8JseyIA0ruftzXmGx3ozg==
+SHA1-Digest: +HJYbXOI/OZ31fmhMKbzVJTQy+k=
+SHA256-Digest: 3DlneQoko48FfAcYeSo1+LP4S60Hdq2UbmQ/dtQHw28=
+
+Name: icons/dict-96.png
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: CPPhpTBdS7fsdNLBT6zWlw==
+SHA1-Digest: niXX5naIe2g6cp3AN/tu4WX+FRs=
+SHA256-Digest: FQyhjxN6F5ZA4UP7BplizaeAI3BJuk6TlSABEy+ShXk=
+
+Name: options/options.css
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: hUf+BqFUpfWgHAJpPHvQbg==
+SHA1-Digest: CuK4uabtWl3wDQYM9+gBwgOnohw=
+SHA256-Digest: Rn2YKiTMyPftZIRWQwwhJeMaEjxHSzhzLHeJwYl0Kw8=
+
+Name: options/options.html
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: 1LpX0cMXfH/ZcOu+1qBCyw==
+SHA1-Digest: Dx+iXzk0Dudy2tibDwBk66y6KvU=
+SHA256-Digest: VlQUd9ss7e7K19wrZ4hq9TmQuTEFXqjdw82OpVRKejk=
+
+Name: options/options.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: BjPa+aQLPvzHaBKEsAGcdA==
+SHA1-Digest: 9dcpXwl4TXCSKsepudWZ1qhCLnM=
+SHA256-Digest: QFfm/cIz3KDqofVtW0DRiFzVeVU9+Ij/DPIzy8oqi/Q=
+
+Name: popup/define.js
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: aV7gg3C5E7q+KFWL9DmbMQ==
+SHA1-Digest: uVxNhQvofjayhazs9Y93+aKMhl8=
+SHA256-Digest: KuxJ68c5kGyEQT2QFuOoERHP+OkzrmqaJQQZrUzxcog=
+
+Name: popup/index.css
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: dfuaWYAhyMeOxVM0pSmTSA==
+SHA1-Digest: CLf9CbUwczslaxIviMmkI/cXibs=
+SHA256-Digest: ihhwoUVDGuDZrvy0/qCT825EP7KxgwlnxwRRzXORp54=
+
+Name: popup/index.html
+Digest-Algorithms: MD5 SHA1 SHA256
+MD5-Digest: YlpaIEC7AA4s17bFc/h9pA==
+SHA1-Digest: up78wsdRCz3E2gZqqGYnqjA7Rws=
+SHA256-Digest: NF2DuyB/cOpPsQetLql44vxGgd+5KD5w7spmA1/sIPs=
+

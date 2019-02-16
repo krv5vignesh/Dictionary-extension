@@ -11,6 +11,13 @@
 
     $("#success-message").hide();
 
+    //Get search engine url
+    browser.storage.sync.get().then((data) => {
+        if(data.searchEngineUrl){
+            $("#search-engine").val(data.searchEngineUrl);
+        }
+    });
+
     function logError(err) {
         console.error(err);
     }
