@@ -2,7 +2,7 @@
   "name": "dictionary-extension",
   "description": "A Dictionary popup for Mozilla",
   "scripts": {
-    "precommit": "lint-staged"
+    
   },
   "lint-staged": {
     "linters": {

@@ -13,13 +13,32 @@
         result.googleQuery = queryPrefix + result.searchText;
 
         if (result.status === "fail") {
-            result.definitions = "No definition found";
+            result.definitions = "No definition found.";
             result.pronounciation = "";
             return result;
         }
         
         return result;
     }
+
+    // Default settings
+    var dictionarySettings = {
+        theme: {
+            value: "auto", //light/dark/auto
+        },
+    };
+
+    //Get Theme
+    function logError(err) {
+        console.error(err);
+    }
+
+    function updateSettings(dbData) {
+        dbData = dbData || {};
+        dictionarySettings = $.extend(dictionarySettings, dbData);
+    }
+
+    browser.storage.sync.get().then(updateSettings, logError);
 
     $(document).dblclick(function(event) {
         var selectedObj;
@@ -39,6 +58,8 @@
         } else {
             reusePopup = false;
         }
+
+        browser.storage.sync.get().then(updateSettings, logError);
 
         requestDefinition(selectedObj);
     });
@@ -78,6 +99,16 @@
             $("#searchMoreLink").css("display", "none");
             $("#searchTextTitle").css("display", "none");
             $("#searchDefinitions").html("Searching...");
+
+            if(dictionarySettings.theme){
+                var theme = getTheme(dictionarySettings.theme);
+                $("#tooltipDictBox").css(textThemes[theme]);
+                $("#searchDefinitions").css(textThemes[theme]);
+                $("#searchTextTitle").css(textThemes[theme]);
+                $("#searchPronounciation").css(textThemes[theme]);
+                $("#searchMoreLink").css(searchMoreLinkThemes[theme]);
+            }
+
             $("#tooltipDictBox").show();
 
             // do not alter position for recursive click in popups

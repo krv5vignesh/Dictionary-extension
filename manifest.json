@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "English Popup Dictionary",
-  "version": "1.8.1",
+  "version": "1.8.8",
 
   "description": "An English Dictionary which gives meaning of a word which is double-click selected on a webpage.",
   "icons": {
@@ -11,10 +11,11 @@
 
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "https://api.dictionaryapi.dev/api/"
   ],
   "background": {
-    "scripts": ["./dependencies/jquery-3.2.1.min.js", "background.js"]
+    "scripts": ["./dependencies/jquery-3.5.1.min.js", "background.js"]
   },
 
   "browser_action": {
@@ -26,18 +27,12 @@
     {
       "matches": ["*://*/*"],
       "js": [
-          "./dependencies/jquery-3.2.1.min.js",
+          "./dependencies/jquery-3.5.1.min.js",
           "content.js",
           "./dependencies/DOMPurify-master/dist/purify.min.js"
         ]
     }
   ],
-
-  "applications": {
-    "gecko": {
-        "id": "{74e2e3a5-6d4f-4766-b870-51b301cedb9b}"
-    }
-  },
   "options_ui": {
     "page": "options/options.html",
     "browser_style": true

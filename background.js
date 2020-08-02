@@ -9,7 +9,8 @@
     };
 
     function getDefinition(searchText, callback) {
-        var definitionApi = "https://googledictionaryapi.eu-gb.mybluemix.net/?define=" + searchText;
+        //var definitionApi = "https://mydictionaryapi.appspot.com/?define=" + searchText;
+        var definitionApi = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchText;
 
         var result = {
             searchText: searchText,
@@ -20,14 +21,14 @@
 
         $.when($.getJSON(definitionApi))
             .then(function(data) {
-                result.pronounciation = data[0].phonetic;
+                result.pronounciation = data[0].phonetics[0].text;
                 var definition = "";
-                if(data[0] && data[0].meaning){
-                    var meanings = data[0].meaning;
+                if(data[0] && data[0].meanings){
+                    var meanings = data[0].meanings;
                     var index = 1;
                     for(var meaning in meanings){
                         if(meanings.hasOwnProperty(meaning)){
-                            definition += index+ ". (" + meaning + ") "+meanings[meaning][0].definition;
+                            definition += index+ ". (" + meanings[meaning].partOfSpeech + ") "+meanings[meaning].definitions[0].definition;
                             if(index != Object.keys(meanings).length){
                                 definition += "<br />";
                             }

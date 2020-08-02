@@ -11,8 +11,18 @@
         var resultHtml = "",
             definitions;
         var googleQuery, searchMore;
+        
+        googleQuery = queryPrefix + result.searchText;
+        searchMore =
+            "<br/><a href='" +
+            googleQuery +
+            "'style='float:left; color:#1a0dab' target='_blank'>More</a>";
 
         resultHtml += "<b>" + result.searchText + "</b>&nbsp";
+
+        if(result.status === "fail")
+            return resultHtml + "<br /><br />No definition found.<br />" + searchMore;
+        
         if (result.pronounciation) {
             resultHtml += result.pronounciation;
         }
@@ -21,11 +31,7 @@
 
         definitions = result.definitions + "<br />";
 
-        googleQuery = queryPrefix + result.searchText;
-        searchMore =
-            "<br/><a href='" +
-            googleQuery +
-            "'style='float:left; color:#1a0dab' target='_blank'>More</a>";
+        
         resultHtml += definitions + searchMore;
 
         return resultHtml;
@@ -40,7 +46,8 @@
     }
 
     function getDefinition(searchText, callback) {
-        var definitionApi = "https://googledictionaryapi.eu-gb.mybluemix.net/?define=" + searchText;
+        var definitionApi = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchText;
+        //var definitionApi = "https://googledictionaryapi.eu-gb.mybluemix.net/?define=" + searchText;
 
         var result = {
             searchText: searchText,
@@ -51,14 +58,14 @@
 
         $.when($.getJSON(definitionApi))
             .then(function(data) {
-                result.pronounciation = data[0].phonetic;
+                result.pronounciation = data[0].phonetics[0].text;
                 var definition = "";
-                if(data[0] && data[0].meaning){
-                    var meanings = data[0].meaning;
+                if(data[0] && data[0].meanings){
+                    var meanings = data[0].meanings;
                     var index = 1;
                     for(var meaning in meanings){
                         if(meanings.hasOwnProperty(meaning)){
-                            definition += index+ ". (" + meaning + ") "+meanings[meaning][0].definition;
+                            definition += index+ ". (" + meanings[meaning].partOfSpeech + ") "+meanings[meaning].definitions[0].definition;
                             if(index != Object.keys(meanings).length){
                                 definition += "<br />";
                             }
@@ -126,9 +133,9 @@
     });
 
     // load recent search in init
-    recentSearch = localStorage.getItem("recentSearchText");
-    if (recentSearch) {
-        requestDefinition(recentSearch);
-    }
+    // recentSearch = localStorage.getItem("recentSearchText");
+    // if (recentSearch) {
+    //     requestDefinition(recentSearch);
+    // }
     document.getElementById("query").focus();
 })();
